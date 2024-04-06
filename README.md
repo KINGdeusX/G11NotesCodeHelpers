@@ -30,7 +30,7 @@ in this example, the first condition is **true** therefore whatever code was pla
 
 if the statement is **false** , then it will go over all the other ***else if*** statements until it reaches the ***else*** statement.
 
-<hr>
+---
 
 ### Section 2: Conditions 
 
@@ -56,7 +56,7 @@ In the Example above, 1 returns true if both values from left and right of the "
 
 if the values from left and right of the "Equal-Equal" are not the same then the result is false.
 
-<hr>
+---
 
 ### Section 3 : Callable Functions
 
@@ -81,3 +81,39 @@ and this is how you call it.
 ```
 my_function();
 ```
+
+---
+
+### Section 4 : Overwrite GPIO to GND or 5V
+
+Overwriting the GPIO pins is possible. Been able to relocate or place the ***(+5V)*** and ***(GND)*** line in anywhere in the pins is very help full when you are trying to acheive ***ZERO-JUMPER-WIRE*** build.
+
+Let's firts define the pins;
+Example lets have the PIN 13 as your Negative (GND) and the PIN 12 as your Positive (+5V). 
+```
+#define POSITIVE 12
+#define NEGATIVE 13
+```
+
+Next in the `void setup ()` we need to Identify its **pinMode()**
+Since both of these pins are acting as a constant power source we need to set them both into OUTPUT. So that this will provide power to the device we are tryin to power, here is the example.
+
+```
+void setup() {
+    pinMode(POSITIVE, OUTPUT);
+    pinMode(NEGATIVE, OUTPUT);
+}
+```
+at this point we still do not have power through them yet. To enable power to flow through them, we need to define its ***digitalWrite()*** current flow.
+
+**ALWAYS REMEMBER THAT (GND) ALWAYS SUCKS IN ELECTRONS AND (+5V) ALWAYS GIVES OFF ELECTRONS THAT ALLOWS THE ELECTRONS TO FLOW THROUGH THE COMPONENTS AND GENERATING ACTIONS**
+
+Finally to make the pin 12 to act like a +5V, lets set it to HIGH in the digitalWrite(); and, set the pin 13 as LOW.
+
+Like this
+
+```
+digitalWrite(POSITIVE, HIGH);
+digitalWrite(NEGTAIVE, LOW);
+```
+HIGH gives off electrons and LOW sucks in electrons completing the circuit in between.
