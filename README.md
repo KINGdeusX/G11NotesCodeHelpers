@@ -117,3 +117,31 @@ digitalWrite(POSITIVE, HIGH);
 digitalWrite(NEGTAIVE, LOW);
 ```
 HIGH gives off electrons and LOW sucks in electrons completing the circuit in between.
+
+---
+
+### Section 5 : Local VS Global Variables
+
+Local variable - is define inside any of the following;
+* functions
+* loops
+* coditionals
+* inner loops and conditionals
+
+meaning their values are only used within the space of the constructors they placed in
+
+Global Variables - are used in the all parts of the code. meaning the values within that variable are accessible even if you have loops within loops
+
+Example
+```
+#include <Arduino.h>
+
+int imGlobal = 10; // This variable is accessible in setup and loop
+
+void setup() {
+    int imOnlyInSetup = 11; // This is only accessible within setup
+}
+void loop() {
+    int imOnlyInLoop = 12; // This is only accessible within loop
+}
+```
