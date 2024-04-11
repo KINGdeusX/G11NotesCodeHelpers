@@ -117,94 +117,98 @@ void setup() {
 }
 
 void loop() {
-	float duration, distance; 
+    float duration, distance;
 
-    digitalWrite(trig, LOW); 
-    delayMicroseconds(2); 
-    digitalWrite(trig, HIGH); 
-    delayMicroseconds(10); 
-    digitalWrite(trig, LOW); 
+    digitalWrite(trig, LOW);
+    delayMicroseconds(2);
+    digitalWrite(trig, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trig, LOW);
 
-    duration = pulseIn(echo, HIGH); 
-    distance = (duration * 0.0343) / 2; 
+    duration = pulseIn(echo, HIGH);
+    distance = (duration * 0.0343) / 2;
 
     if (distance <= treashold) {
         stop();
-		lcd.clear();
-		mad();
-		policeLED(Red, Green, Blue);
-    }
-    else {
-		if (IrReceiver.decode()) {
-			int remoteValue = IrReceiver.decodedIRData.command;
+        lcd.clear();
+        mad();
+        policeLED(Red, Green, Blue);
+    } else {
+        if (IrReceiver.decode()) {
+            int remoteValue = IrReceiver.decodedIRData.command;
 
             if (remoteValue == 7) {
-               speed_variable -= vol_speed_increment;
-               Serial.println("Speed decreased to " + String(speed_variable));
-               lcd.clear();
-               lcd.setCursor(0, 0);
-               lcd.print("Speed dec " + String(speed_variable));
+                speed_variable -= vol_speed_increment;
+                Serial.println("Speed decreased to " + String(speed_variable));
+                lcd.clear();
+                lcd.setCursor(0, 0);
+                lcd.print("Speed - " + String(speed_variable));
+            } else if (remoteValue == 21) {
+                speed_variable += vol_speed_increment;
+                Serial.println("Speed increased to " + String(speed_variable));
+                lcd.clear();
+                lcd.setCursor(0, 0);
+                lcd.print("Speed + " + String(speed_variable));
+            } else if (remoteValue == 13) {
+                turn_speed_variable -= vol_speed_increment;
+                Serial.println("Turn Speed decreased to " + String(turn_speed_variable));
+                lcd.clear();
+                lcd.setCursor(0, 0);
+                lcd.print("Turn - " + String(turn_speed_variable));
+            } else if (remoteValue == 25) {
+                turn_speed_variable += vol_speed_increment;
+                Serial.println("Turn Speed increased to " + String(turn_speed_variable));
+                lcd.clear();
+                lcd.setCursor(0, 0);
+                lcd.print("Turn + " + String(turn_speed_variable));
+            } else if (remoteValue == 24) {
+                forward(speed_variable);
+                Serial.println("FORWARDING with SPEED " + String(speed_variable));
+                lcd.clear();
+                happy();
+                greenLED(Red, Green, Blue);
+            } else if (remoteValue == 82) {
+                backward(speed_variable);
+                Serial.println("BACWARDS with SPEED " + String(speed_variable));
+                lcd.clear();
+                shock();
+                purpleLED(Red, Green, Blue);
+            } else if (remoteValue == 8) {
+                turn_left(speed_variable, turn_speed_variable);
+                Serial.println("TURNING LEFT with SPEED " + String(speed_variable));
+                lcd.clear();
+                nargesFACES();
+                blueLED(Red, Green, Blue);
+            } else if (remoteValue == 90) {
+                turn_right(speed_variable, turn_speed_variable);
+                Serial.println("TURNING RIGHT with SPEED " + String(speed_variable));
+                lcd.clear();
+                nargesFACES();
+                blueLED(Red, Green, Blue);
+            } else if (remoteValue == 71) {
+                // increase dist 1
+                treashold += vol_speed_increment;
+                lcd.clear();
+                lcd.setCursor(0, 0);
+                lcd.print("Dist Tol + " + String(treashold) + "cm");
+                delay(700);
+            } else if (remoteValue == 69) {
+                // decrease dist tol
+                treashold -= vol_speed_increment;
+                lcd.clear();
+                lcd.setCursor(0, 0);
+                lcd.print("Dist Tol - " + String(treashold) + "cm");
+                delay(700);
+            } else {
+                stop();
+                Serial.println("Unasigned Key Value Stoping (" + String(remoteValue) + ")");
+                lcd.clear();
+                sad();
+                redLED(Red, Green, Blue);
             }
-            else if (remoteValue == 21) {
-               speed_variable += vol_speed_increment;
-               Serial.println("Speed increased to " + String(speed_variable));
-               lcd.clear();
-               lcd.setCursor(0, 0);
-               lcd.print("Speed in " + String(speed_variable));
-            }
-            else if (remoteValue == 13) {
-               turn_speed_variable -= vol_speed_increment;
-               Serial.println("Turn Speed decreased to " + String(turn_speed_variable));
-               lcd.clear();
-               lcd.setCursor(0, 0);
-               lcd.print("Turn dec " + String(turn_speed_variable));
-            }
-            else if (remoteValue == 25) {
-               turn_speed_variable += vol_speed_increment;
-               Serial.println("Turn Speed increased to " + String(turn_speed_variable));
-               lcd.clear();
-               lcd.setCursor(0, 0);
-               lcd.print("Turn in " + String(turn_speed_variable));
-            }
-
-            else if (remoteValue == 24) {
-               forward(speed_variable);
-               Serial.println("FORWARDING with SPEED " + String(speed_variable));
-               lcd.clear();
-               happy();
-               greenLED(Red, Green, Blue);
-            }
-            else if (remoteValue == 82) {
-               backward(speed_variable);
-               Serial.println("BACWARDS with SPEED " + String(speed_variable));
-               lcd.clear();
-               shock();
-               purpleLED(Red, Green, Blue);
-            }
-            else if (remoteValue == 8) {
-               turn_left(speed_variable,turn_speed_variable);
-               Serial.println("TURNING LEFT with SPEED " + String(speed_variable));
-               lcd.clear();
-               nargesFACES();
-               blueLED(Red, Green, Blue);
-            }
-            else if (remoteValue == 90) {
-               turn_right(speed_variable,turn_speed_variable);
-               Serial.println("TURNING RIGHT with SPEED " + String(speed_variable));
-               lcd.clear();
-               nargesFACES();
-               blueLED(Red, Green, Blue);
-            }
-            else {
-               stop();
-               Serial.println("Unasigned Key Value Stoping (" + String(remoteValue) + ")");
-               lcd.clear();
-               sad();
-               redLED(Red, Green, Blue);
-            }
-			// Serial.println(remoteValue);
-			IrReceiver.resume();
-		}
+            // Serial.println(remoteValue);
+            IrReceiver.resume();
+        }
     }
     delay(100);
 }
