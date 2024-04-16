@@ -92,25 +92,35 @@ void loop() {
 
     // Serial.println(distance);
 
-    if (IrReceiver.decode()) {
-        int remoteValue = IrReceiver.decodedIRData.command;
-        if (remoteValue == forward_action) {
-            forward();
+    if (distance > 40) {
+        if (IrReceiver.decode()) {
+            int remoteValue = IrReceiver.decodedIRData.command;
+            if (remoteValue == forward_action) {
+                forward();
+            }
+            else if (remoteValue == backward_action) {
+                backward();
+            }
+            else if (remoteValue == turn_left_action) {
+                turn_left();
+            }
+            else if (remoteValue == turn_right_action) {
+                turn_right();
+            }
+            else {
+                stop();
+            }
+            Serial.println(remoteValue);
+            IrReceiver.resume();
         }
-        else if (remoteValue == backward_action) {
-            backward();
-        }
-        else if (remoteValue == turn_left_action) {
-            turn_left();
-        }
-        else if (remoteValue == turn_right_action) {
-            turn_right();
-        }
-        else {
-            stop();
-        }
-        Serial.println(remoteValue);
-        IrReceiver.resume();
     }
+    else {
+        stop();
+        delay(1000);
+        backward();
+        delay(1000);
+        turn_left();
+    }
+
     delay(100);
 }
