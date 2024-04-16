@@ -23,12 +23,12 @@ TNKLegacy7i0 and is the author of this repo
 #define negative_ir 9
 #define infra 10
 
-#define enable_1a2 0
-#define enable_3a4 0
-#define input1 0
-#define input2 0
-#define input3 0
-#define input4 0
+#define enable_1a2 6 //PWM
+#define enable_3a4 5 //PWM
+#define input1 7
+#define input2 4
+#define input3 2
+#define input4 3
 
 #define negative_led A0
 #define Blue A1
