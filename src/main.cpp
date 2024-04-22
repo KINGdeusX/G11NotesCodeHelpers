@@ -172,7 +172,36 @@ void loop()
     }
     else
     {
-        if (IrReceiver.decode())
+        if (Serial.available()) {
+            char serial_message(Serial.read());
+            String decoded_message = String(serial_message);
+
+            if (decoded_message == "F") {
+                forward(speed_variable);
+                lcd.clear();
+                happy();
+                greenLED(Red, Green, Blue);
+            }
+            else if (decoded_message == "B") {
+                backward(speed_variable);
+                lcd.clear();
+                shock();
+                purpleLED(Red, Green, Blue);
+            }
+            else if (decoded_message == "L") {
+                turn_left(speed_variable, turn_speed_variable);
+                lcd.clear();
+                nargesFACES();
+                blueLED(Red, Green, Blue);
+            }
+            else if (decoded_message == "R") {
+                turn_right(speed_variable, turn_speed_variable);
+                lcd.clear();
+                nargesFACES();
+                blueLED(Red, Green, Blue);
+            }
+        }
+        else if (IrReceiver.decode())
         {
             int remoteValue = IrReceiver.decodedIRData.command + hash;
 
