@@ -116,7 +116,7 @@ void stop()
 
 void setup()
 {
-    Serial.begin(9600);
+    Serial.begin(115200);
     IrReceiver.begin(infra);
 
     lcd.init();
