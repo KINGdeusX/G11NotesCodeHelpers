@@ -3,7 +3,7 @@
 
    This firmware is coded and signed by 
 TNKLegacy7i0 and is the author of this repo 
-   TNK_ACTA_BOT_FIRMWARE_VERSION_1.35.5
+   TNK_ACTA_BOT_FIRMWARE_VERSION_2.20.1
 
 --------------------------------------------
 
