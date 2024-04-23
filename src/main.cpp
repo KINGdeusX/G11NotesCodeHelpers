@@ -3,7 +3,7 @@
 
    This firmware is coded and signed by 
 TNKLegacy7i0 and is the author of this repo 
-   TNK_ACTA_BOT_FIRMWARE_VERSION_2.20.1
+   TNK_ACTA_BOT_FIRMWARE_VERSION_2.50.6
 
 --------------------------------------------
 
@@ -113,6 +113,22 @@ void stop()
     digitalWrite(input4, LOW);
     Serial.println("STOPED");
 }
+void right_spin(int speed_variable) {
+    analogWrite(enable_1a2, speed_variable);
+    analogWrite(enable_3a4, speed_variable);
+    digitalWrite(input1, reverse_wire_prot_p1);
+    digitalWrite(input2, reverse_wire_prot_p2);
+    digitalWrite(input3, reverse_wire_prot_p1);
+    digitalWrite(input4, reverse_wire_prot_p2);
+}
+void left_spin(int speed_variable) {
+    analogWrite(enable_1a2, speed_variable);
+    analogWrite(enable_3a4, speed_variable);
+    digitalWrite(input1, reverse_wire_prot_p2);
+    digitalWrite(input2, reverse_wire_prot_p1);
+    digitalWrite(input3, reverse_wire_prot_p2);
+    digitalWrite(input4, reverse_wire_prot_p1);
+}
 
 void setup()
 {
@@ -158,17 +174,31 @@ void loop()
 
     if (distance <= treashold)
     {
+        bool left_biased = 0;
+        bool right_biased = 0;
+
         lcd.clear();
-
-        //AUTO MANUVER
-        stop();
-        delay(500);
-        turn_left(speed_variable, turn_speed_variable);
-        delay(500);
-        stop();
-
         mad();
         policeLED(Red, Green, Blue);
+
+        //AUTO MANUVER
+        backward(speed_variable);
+        delay(400);
+        left_spin(speed_variable);
+        delay(500);
+        if (distance >= treashold) {left_biased = 1;} else {left_biased = 0;}
+        right_spin(speed_variable);
+        delay(1000);
+        left_spin(speed_variable);
+        delay(400);
+        if (distance >= treashold) {right_biased = 1;} else {right_biased = 0;}
+        if (left_biased == right_biased) {backward(speed_variable);}
+        else if (left_biased < right_biased) {left_spin(speed_variable);}
+        else if (left_biased > right_biased) {right_spin(speed_variable);}
+        else {stop();}
+        left_biased = 0;
+        right_biased = 0;
+        
     }
     else
     {
@@ -199,6 +229,19 @@ void loop()
                 lcd.clear();
                 nargesFACES();
                 blueLED(Red, Green, Blue);
+            }
+            else if ((decoded_message == "S")) {
+                stop();
+            }
+            else if (decoded_message == "Q") {
+                left_spin(speed_variable);
+                lcd.clear();
+                cute();
+            }
+            else if (decoded_message == "E") {
+                right_spin(speed_variable);
+                lcd.clear();
+                cute();
             }
         }
         else if (IrReceiver.decode())
