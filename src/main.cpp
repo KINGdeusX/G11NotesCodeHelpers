@@ -207,41 +207,46 @@ void loop()
             String decoded_message = String(serial_message);
 
             if (decoded_message == "F") {
-                forward(speed_variable);
                 lcd.clear();
                 happy();
+                forward(speed_variable);
                 greenLED(Red, Green, Blue);
             }
             else if (decoded_message == "B") {
-                backward(speed_variable);
                 lcd.clear();
                 shock();
+                backward(speed_variable);
                 purpleLED(Red, Green, Blue);
             }
             else if (decoded_message == "L") {
-                turn_left(speed_variable, turn_speed_variable);
                 lcd.clear();
                 nargesFACES();
+                turn_left(speed_variable, turn_speed_variable);
                 blueLED(Red, Green, Blue);
             }
             else if (decoded_message == "R") {
-                turn_right(speed_variable, turn_speed_variable);
                 lcd.clear();
                 nargesFACES();
+                turn_right(speed_variable, turn_speed_variable);
                 blueLED(Red, Green, Blue);
             }
             else if ((decoded_message == "S")) {
+                lcd.clear();
+                sad();
                 stop();
+                redLED(Red, Green, Blue);
             }
             else if (decoded_message == "Q") {
-                left_spin(speed_variable);
                 lcd.clear();
                 cute();
+                left_spin(speed_variable);
+                yellowLED(Red, Green, Blue);
             }
             else if (decoded_message == "E") {
-                right_spin(speed_variable);
                 lcd.clear();
                 cute();
+                right_spin(speed_variable);
+                yellowLED(Red, Green, Blue);
             }
         }
         else if (IrReceiver.decode())
