@@ -145,3 +145,50 @@ void loop() {
     int imOnlyInLoop = 12; // This is only accessible within loop
 }
 ```
+---
+### Section 6 : Obtaining Values from Universal and Non-universial Remotes
+
+In this example, we will explore how IrRemote library features can help you use all kinds of Infrared remotes and use it in your robots.
+
+First things first, each remote emits a signal (Infrared) to be more specific. the light will flash according to the bits it's assigned to. 
+on the other end the receiver interprets these messages and convert it to human readable text or display.
+
+Here are some examples:
+We need to import the library first. to do that just type.
+```
+#inlucde <IrRemote.h>
+```
+next we need to start the communication for our Ir Receiver that is connected to my pin number 11.
+```
+void setup() {
+    Serial.begin(9600); //started the serial communication, allowing us to display the values
+    IrReceiver.begin(11); // this will allow us to initialize our communication from the Ir Receiver.
+}
+```
+next step is we need to have a value catcher. to do that here are some snippet of code.
+```
+void loop() {
+    if (IrReceiver.decode()) { // STARTS LISTENING
+        IrReceiver.resume(); // ALLOWS THE CODE TO MOVE FORWARD
+    }
+}
+```
+Next step will be to define the data type of the message that we'll receive.
+then have a way to consistently read that data
+here's what we have to do.
+```
+    if (IrReceiver.decode()) { // STARTS LISTENING
+
+        auto message = IrReceiver.decodedIRData.decodedRawData; // Since we need a way to store the values, we assinged it to an auto Datatype
+        String command = String(message, HEX); // This command enables us to properly catch the values consistently.
+
+        IrReceiver.resume(); // ALLOWS THE CODE TO MOVE FORWARD
+    }
+```
+After that you'll be able to compare values from the command variable. Since its a datatype String, you are free to use the single or double quotation marks.
+```
+        if (command == "bc43ff00") { // this now is your remote value.
+            Serial.println("THIS BUTTON IS PRESSED");
+        }
+```
+**Note that some remote gives off their values no problem some may or may not are harder to obtain, at this moment these are the few ways to use it.**
