@@ -145,7 +145,9 @@ void loop() {
     int imOnlyInLoop = 12; // This is only accessible within loop
 }
 ```
+
 ---
+
 ### Section 6 : Obtaining Values from Universal and Non-universial Remotes
 
 In this example, we will explore how IrRemote library features can help you use all kinds of Infrared remotes and use them in your robots.
@@ -193,6 +195,8 @@ After that you'll be able to compare values from the command variable. Since its
         }
 ```
 **Note that some remote gives off their values no problem some may or may not are harder to obtain, at this moment these are the few ways to use it.**
+
+---
 
 ### Section 7 : Proximity Sensor
 
