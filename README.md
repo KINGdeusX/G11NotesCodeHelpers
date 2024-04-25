@@ -148,10 +148,11 @@ void loop() {
 ---
 ### Section 6 : Obtaining Values from Universal and Non-universial Remotes
 
-In this example, we will explore how IrRemote library features can help you use all kinds of Infrared remotes and use it in your robots.
+In this example, we will explore how IrRemote library features can help you use all kinds of Infrared remotes and use them in your robots.
 
 First things first, each remote emits a signal (Infrared) to be more specific. the light will flash according to the bits it's assigned to. 
-on the other end the receiver interprets these messages and convert it to human readable text or display.
+on the other end, the receiver interprets these messages and converts them to human readable text or display.
+
 
 Here are some examples:
 We need to import the library first. to do that just type.
@@ -192,3 +193,34 @@ After that you'll be able to compare values from the command variable. Since its
         }
 ```
 **Note that some remote gives off their values no problem some may or may not are harder to obtain, at this moment these are the few ways to use it.**
+
+### Section 7 : Proximity Sensor
+
+This code for the sensor is based on the Boolean data type. meaning it will only ask for either a 1 or 0. By default, the value which the device will emit is 1, meaning it hasn't detected anything at all, if it detects anything it will return 0.
+
+usually, the sensor has 3 pins, 1 for positive power, 1 for the negative power, and lastly 1 for data out.
+
+Here are some examples;
+```
+// you have defined the pin 13 is input, since we are trying to listen from the out of the sensor.
+
+#define device_input 13
+
+// Next we need to listen from that pin and
+
+bool poximity_sensor = digitalRead(device_input);
+
+// Display the value to the Serial Monitor
+
+Serial.println(poximity_sensor);
+```
+
+you can then now compare these values like this:
+```
+if (poximity_sensor == 1) {
+    Serial.println("Theres no object ahead");
+}
+else {
+    Serial.println("Detected an Object");
+}
+```
