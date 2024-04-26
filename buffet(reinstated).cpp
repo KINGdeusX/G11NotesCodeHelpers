@@ -1,3 +1,36 @@
+/* 
+=====================================================
+|                 WIRING PARAMETERS                 |
+=====================================================
+| MODULE                |       ARDUINO             |
++-----------------------+---------------------------+
+|       Ultrasonic      |                           |
++-----------------------+---------------------------+
+|       Vcc             |       +5v                 |
+|       Trig            |       13                  |
+|       Echo            |       12                  |
+|       GND             |       GND                 |
++-----------------------+---------------------------+
+|       IR Receiver     |                           |
++-----------------------+---------------------------+
+|       Out             |       11                  |
+|       GND             |       GND                 |
+|       Vcc             |       +5v                 |
++-----------------------+---------------------------+
+|       L298N/L293D     |                           |
++-----------------------+---------------------------+
+|       POWER1          |       +5v                 |
+|       GND             |       GND                 |
+|       EnA/En1&2       |       10                  |
+|       EnB/En3&4       |       9                   |
+|       IN1             |       8                   |
+|       IN2             |       7                   |
+|       IN3             |       6                   |
+|       IN4             |       5                   |
+|       POWER2          |       BAT+ ~ +6v to +12v  |
++-----------------------+---------------------------+
+*/
+
 #include <Arduino.h>  
 #include <IRremote.h>  
 
@@ -5,22 +38,26 @@
 #define echo 12 
 #define infra 11 
 
-#define enable_1a2 9 
-#define enable_3a4 10 
+#define enable_1a2 10 
+#define enable_3a4 9 
 
-#define input1 6 
-#define input2 5 
-#define input3 7 
-#define input4 8 
+#define input1 8 
+#define input2 7 
+#define input3 6 
+#define input4 5 
 
 int forward_action = 0;
 int backward_action = 0;
 int turn_left_action = 0;
 int turn_right_action = 0;
+int stop_action = 0;
+
+int distance_treashold = 40;
+int defined_speed = 150;
 
 void forward() { 
-    analogWrite(enable_1a2, 150);
-    analogWrite(enable_3a4, 150);
+    analogWrite(enable_1a2, defined_speed);
+    analogWrite(enable_3a4, defined_speed);
     digitalWrite(input1, LOW); 
     digitalWrite(input2, HIGH);
     digitalWrite(input3, HIGH);
@@ -28,8 +65,8 @@ void forward() {
     Serial.println("FORWARDING");
 }
 void backward() { 
-    analogWrite(enable_1a2, 150);
-    analogWrite(enable_3a4, 150);
+    analogWrite(enable_1a2, defined_speed);
+    analogWrite(enable_3a4, defined_speed);
     digitalWrite(input1, HIGH);
     digitalWrite(input2, LOW); 
     digitalWrite(input3, LOW); 
@@ -37,21 +74,21 @@ void backward() {
     Serial.println("BACKING UP");
 }
 void turn_right() { 
-    analogWrite(enable_1a2, 0); 
-    analogWrite(enable_3a4, 150);
-    digitalWrite(input1, LOW); 
-    digitalWrite(input2, HIGH); 
+    analogWrite(enable_1a2, defined_speed); 
+    analogWrite(enable_3a4, defined_speed);
+    digitalWrite(input1, HIGH); 
+    digitalWrite(input2, LOW); 
     digitalWrite(input3, HIGH); 
     digitalWrite(input4, LOW); 
     Serial.println("TURNING RIGHT");
 }
 void turn_left() { 
-    analogWrite(enable_1a2, 150); 
-    analogWrite(enable_3a4, 0); 
+    analogWrite(enable_1a2, defined_speed); 
+    analogWrite(enable_3a4, defined_speed); 
     digitalWrite(input1, LOW); 
     digitalWrite(input2, HIGH); 
-    digitalWrite(input3, HIGH); 
-    digitalWrite(input4, LOW); 
+    digitalWrite(input3, LOW); 
+    digitalWrite(input4, HIGH); 
     Serial.println("TURNING LEFT");
 }
 void stop() {
@@ -66,7 +103,7 @@ void stop() {
 
 void setup() {
     Serial.begin(9600); 
-    IrReceiver.begin(infra, true); 
+    IrReceiver.begin(infra); 
 
     pinMode(trig, OUTPUT); 
     pinMode(echo, INPUT); 
@@ -107,9 +144,10 @@ void loop() {
             else if (remoteValue == turn_right_action) {
                 turn_right();
             }
-            else {
+            else if (remoteValue == stop_action) {
                 stop();
             }
+
             Serial.println(remoteValue);
             IrReceiver.resume();
         }

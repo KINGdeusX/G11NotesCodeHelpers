@@ -260,3 +260,8 @@ For decreasign the value, we can use the same technique before.
 dynamic_var -= 1;
 ```
 Instead of using plus, we used subtraction.
+<<<<<<< HEAD
+=======
+
+---
+>>>>>>> 75c0167 (updated buffet with wiring)
