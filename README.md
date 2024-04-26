@@ -228,3 +228,35 @@ else {
     Serial.println("Detected an Object");
 }
 ```
+---
+
+### Section 8 : Dynamic Variables
+This section will dicuss to create dynamic variables and what uses cases can you use it for.
+
+They are called Dynamic Variables Due to is constant cyclic behaviuor. Dynamic variables are the variables that has a certain pattern of changes that allows a set code parameters to refer to its set values. Dynamic variables
+
+Let's say for example you want to create a dynamic Variable.
+
+```
+int dynamic_var;
+```
+
+In this examplem, we have create a blank variable with a datatype integer. You are free to set yours to what ever datatype you want to use.
+
+
+In my example I want to use it as a Speed control for my Car Robot.
+```
+int dynamic_var;
+
+if (true) {
+    dynamic_var += 1;
+    // this is a shorthand for dynamic_var = dynamic_var + 1;
+}
+```
+S, if the if statement above is true, then the dynamic variable will be set to the same value as the original number but added 1. I the dynamic_var has a value 1 alreadym once the statement returns true once more then it will add another 1 to the dynamic_var, thus increasing its value.
+
+For decreasign the value, we can use the same technique before.
+```
+dynamic_var -= 1;
+```
+Instead of using plus, we used subtraction.
