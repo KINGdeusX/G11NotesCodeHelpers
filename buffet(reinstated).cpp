@@ -29,18 +29,27 @@
 |       IN4             |       5                   |
 |       POWER2          |       BAT+ ~ +6v to +12v  |
 +-----------------------+---------------------------+
+|       I2C LCD         |                           |
++-----------------------+---------------------------+
+|       SCL             |       A5                  |
+|       SDA             |       A4                  |
+|       Vcc             |       +5v                 |
+|       GND             |       GND                 |
++-----------------------+---------------------------+
 */
 
 #include <Arduino.h>  
 #include <IRremote.h>  
+// #include <Wire.h>
+// #include <LiquidCrystal_I2C.h>
+
+// LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 #define trig 13 
 #define echo 12 
 #define infra 11 
-
 #define enable_1a2 10 
 #define enable_3a4 9 
-
 #define input1 8 
 #define input2 7 
 #define input3 6 
