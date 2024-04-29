@@ -182,6 +182,7 @@ void loop()
         policeLED(Red, Green, Blue);
 
         //AUTO MANUVER
+        stop();
         backward(speed_variable);
         delay(400);
         left_spin(speed_variable);
@@ -196,6 +197,7 @@ void loop()
         else if (left_biased < right_biased) {left_spin(speed_variable);}
         else if (left_biased > right_biased) {right_spin(speed_variable);}
         else {stop();}
+        stop();
         left_biased = 0;
         right_biased = 0;
         
