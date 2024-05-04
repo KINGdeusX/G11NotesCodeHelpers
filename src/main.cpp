@@ -15,6 +15,7 @@ TNKLegacy7i0 and is the author of this repo
 #include <IRremote.h>
 #include <emojis.h>
 #include <customLights.h>
+#include <NewPing.h>
 
 #define positive_sonic 11
 #define echo 13
@@ -65,6 +66,8 @@ int assigned_reduce_dist_tol = 69;
 
 bool reverse_wire_prot_p1 = LOW;
 bool reverse_wire_prot_p2 = HIGH;
+
+NewPing ultrasonic (trig, echo, 400);
 
 // Custom Fuctions
 void forward(int speed_variable)
@@ -148,29 +151,112 @@ void setup()
     digitalWrite(negative_ir, LOW);
     digitalWrite(negative_led, LOW);
 
-    pinMode(trig, OUTPUT);
-    pinMode(echo, INPUT);
-
     pinMode(enable_1a2, OUTPUT);
     pinMode(enable_3a4, OUTPUT);
     pinMode(input1, OUTPUT);
     pinMode(input2, OUTPUT);
     pinMode(input3, OUTPUT);
     pinMode(input4, OUTPUT);
+
+    int Sonic = 0;
+    int LDRL = 0;
+    int RDRL = 0;
+    int IRS = 0;
+    int MOTORS = 0;
+    int SERVO = 0;
+    int SOL = 0;
+
+    int sys_check_delay = 800;
+
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("WELCOME");
+    Serial.println("WELCOME");
+    delay(sys_check_delay);
+    lcd.setCursor(0,1);
+    lcd.print("BEGIN SYSTEM CHECK");
+    Serial.println("BEGIN SYSTEM CHECK");
+
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("SYSTEM CHECK");
+    Serial.println("SYSTEM CHECK");
+    delay(sys_check_delay);
+
+    int sonic_check = ultrasonic.ping_cm();
+
+    if (sonic_check != 0) {
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("Ultrasonic : ");
+        lcd.setCursor(0, 1);
+        lcd.print("GOOD");
+        Serial.println("Ultrasonic : GOOD");
+        Sonic = 1;
+        delay(sys_check_delay);
+    }
+    else {
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("Ultrasonic : ");
+        lcd.setCursor(0,1);
+        lcd.print("ERROR");
+        Serial.println("Ultrasonic : BAD");
+        Sonic = 0;
+        delay(sys_check_delay);
+    }
+
+    if (IrReceiver.decode()) {
+        IrReceiver.resume();
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("IR SENSOR : ");
+        lcd.setCursor(0,1);
+        lcd.print("GOOD");
+        Serial.println("IR SENSOR : GOOD");
+        IRS = 1;
+        delay(sys_check_delay);
+    }
+    else {
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("IR SENSOR : ");
+        lcd.setCursor(0,1);
+        lcd.print("ERROR");
+        Serial.println("IR SENSOR : BAD");
+        IRS = 0;
+        delay(sys_check_delay);
+    }
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("MOTOR CHECK");
+    Serial.println("MOTOR CHECK");
+    forward(speed_variable);
+    delay(sys_check_delay);
+    backward(speed_variable);
+    delay(sys_check_delay);
+    turn_left(speed_variable, turn_speed_variable);
+    delay(sys_check_delay);
+    turn_right(speed_variable, turn_speed_variable);
+    delay(sys_check_delay);
+    stop();
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("DONE");
+    Serial.println("DONE");
+    delay(sys_check_delay);
+
+    Serial.println("SONIC: " + String(sonic_check));
+    Serial.println("IR SENSOR: "  + String(IrReceiver.decode()));
+
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("STAND BY");
 }
 
 void loop()
 {
-    float duration, distance;
-
-    digitalWrite(trig, LOW);
-    delayMicroseconds(2);
-    digitalWrite(trig, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(trig, LOW);
-
-    duration = pulseIn(echo, HIGH);
-    distance = (duration * 0.0343) / 2;
+    int distance = ultrasonic.ping_cm();
 
     if (distance <= treashold)
     {
